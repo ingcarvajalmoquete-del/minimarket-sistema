@@ -1,0 +1,8 @@
+.env
+.idea/
+.vscode/
+*.log
+docker_data/
+vendor/
+.DS_Store
+Thumbs.db
