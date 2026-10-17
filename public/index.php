@@ -43,13 +43,14 @@ if (isset($_ENV['MYSQL_URL']) || getenv('MYSQL_URL')) {
     $_ENV['DB_PORT'] = (string)($dbUrl['port'] ?? 3306);
     $_ENV['DB_USER'] = $dbUrl['user'] ?? 'root';
     $_ENV['DB_PASSWORD'] = $dbUrl['pass'] ?? '';
-    $_ENV['DB_NAME'] = ltrim($dbUrl['path'] ?? 'minimarket_db', '/');
+    // Si schema.sql creó minimarket_db, usamos esa como prioridad
+    $_ENV['DB_NAME'] = 'minimarket_db';
 } elseif (isset($_ENV['MYSQLHOST']) || getenv('MYSQLHOST')) {
     $_ENV['DB_HOST'] = $_ENV['MYSQLHOST'] ?? getenv('MYSQLHOST');
     $_ENV['DB_PORT'] = $_ENV['MYSQLPORT'] ?? getenv('MYSQLPORT') ?? '3306';
     $_ENV['DB_USER'] = $_ENV['MYSQLUSER'] ?? getenv('MYSQLUSER');
     $_ENV['DB_PASSWORD'] = $_ENV['MYSQLPASSWORD'] ?? getenv('MYSQLPASSWORD');
-    $_ENV['DB_NAME'] = $_ENV['MYSQLDATABASE'] ?? getenv('MYSQLDATABASE');
+    $_ENV['DB_NAME'] = 'minimarket_db';
 }
 
 use App\Core\Router;
