@@ -1,24 +1,15 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 
-# Install PDO MySQL and required extensions
+# Install PDO MySQL
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+WORKDIR /app
 
-# Configure Apache DocumentRoot to point to /public
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# Copy application files
+COPY . /app
 
-# Set working directory
-WORKDIR /var/www/html
+# Expose port (Railway passes PORT environment variable)
+EXPOSE 8080
 
-# Copy project files
-COPY . /var/www/html/
-
-# Expose port (Railway dynamically injects PORT)
-EXPOSE 80
-
-# Script to use Railway dynamic port if provided
-CMD sh -c "sed -i 's/80/'\${PORT:-80}'/g' /etc/apache2/ports.conf /etc/apache2/sites-available/*.conf && apache2-foreground"
+# Run PHP built-in server with public/ as document root
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public public/index.php"]
