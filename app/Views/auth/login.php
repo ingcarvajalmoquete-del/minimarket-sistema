@@ -1,5 +1,9 @@
 <?php
 use App\Core\Session;
+
+$flashError = Session::getFlash('error');
+$flashSuccess = Session::getFlash('success');
+$old = Session::getFlash('old', []);
 ?>
 <div class="bg-white rounded-2xl shadow-xl overflow-hidden p-8 border border-slate-800">
     <div class="text-center mb-8">
